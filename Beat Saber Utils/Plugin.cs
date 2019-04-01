@@ -9,6 +9,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using IllusionPlugin;
 using Harmony;
+using BS_Utils.Data;
 
 namespace BS_Utils
 {
@@ -21,6 +22,15 @@ namespace BS_Utils
         public static Gameplay.LevelData LevelData = new Gameplay.LevelData();
         public delegate void LevelDidFinish(StandardLevelScenesTransitionSetupDataSO levelScenesTransitionSetupDataSO, LevelCompletionResults levelCompletionResults);
         public static event LevelDidFinish LevelDidFinishEvent;
+
+        /// <summary>
+        /// Handles useful Data from the song and menu.
+        /// This field can and should be used in other mods, so long as this Plugin is assumed to exist.
+        /// You can also hook into an event that is called every time the Data is updated by doing <code>Data.statusChange += yourHookHere</code>
+        /// And you can access Data directly by doing: <code>BS_Utils.Plugin.dataManager.Data</code>
+        /// </summary>
+        public static DataManager dataManager = new DataManager();
+
         public void OnApplicationStart()
         {
             SceneManager.activeSceneChanged += SceneManagerOnActiveSceneChanged;
@@ -28,7 +38,7 @@ namespace BS_Utils
 
             //Create Harmony Instance
             harmony = HarmonyInstance.Create("com.kyle1413.BeatSaber.BS-Utils");
-
+            dataManager.OnApplicationStart();
         }
 
         private void SceneManagerOnActiveSceneChanged(Scene oldScene, Scene newScene)
@@ -51,6 +61,7 @@ namespace BS_Utils
         {
             SceneManager.activeSceneChanged -= SceneManagerOnActiveSceneChanged;
             SceneManager.sceneLoaded -= SceneManager_sceneLoaded;
+            dataManager.OnApplicationQuit();
         }
 
         public void OnLevelWasLoaded(int level)
@@ -64,8 +75,7 @@ namespace BS_Utils
 
         public void OnUpdate()
         {
-
-
+            dataManager.OnUpdate();
         }
 
         public void OnFixedUpdate()
