@@ -13,7 +13,7 @@ namespace BS_Utils.Gameplay.HarmonyPatches
                         typeof(GameplayModifiers),
                                     typeof(PlayerSpecificSettings),
             typeof(PracticeSettings),
-          typeof(bool)})]
+              typeof(bool)})]
     [HarmonyPatch("Init", MethodType.Normal)]
     class BlahBlahGrabTheLevelData
     {
